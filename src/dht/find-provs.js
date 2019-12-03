@@ -23,6 +23,13 @@ module.exports = configure(({ ky }) => {
     })
 
     for await (const message of ndjson(toIterable(res.body))) {
+      // 3 = QueryError
+      // https://github.com/libp2p/go-libp2p-core/blob/6e566d10f4a5447317a66d64c7459954b969bdab/routing/query.go#L18
+      // https://github.com/libp2p/go-libp2p-kad-dht/blob/master/routing.go#L525-L526
+      if (message.Type === 3) {
+        throw new Error(message.Extra)
+      }
+
       // 4 = Provider
       // https://github.com/libp2p/go-libp2p-core/blob/6e566d10f4a5447317a66d64c7459954b969bdab/routing/query.go#L20
       if (message.Type === 4 && message.Responses) {
