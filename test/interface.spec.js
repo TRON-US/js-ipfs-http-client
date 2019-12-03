@@ -5,7 +5,7 @@ const tests = require('interface-ipfs-core')
 const CommonFactory = require('./utils/interface-common-factory')
 const isWindows = process.platform && process.platform === 'win32'
 
-describe.only('interface-ipfs-core tests', () => {
+describe('interface-ipfs-core tests', () => {
   const defaultCommonFactory = CommonFactory.createAsync()
 
   tests.root(defaultCommonFactory)
@@ -122,15 +122,7 @@ describe.only('interface-ipfs-core tests', () => {
     ]
   })
 
-  tests.miscellaneous(defaultCommonFactory, {
-    skip: [
-      // stop
-      {
-        name: 'should stop the node',
-        reason: 'FIXME go-ipfs returns an error https://github.com/ipfs/go-ipfs/issues/4078'
-      }
-    ]
-  })
+  tests.miscellaneous(defaultCommonFactory)
 
   tests.name(CommonFactory.createAsync({
     spawnOptions: {
@@ -138,7 +130,6 @@ describe.only('interface-ipfs-core tests', () => {
     }
   }), {
     skip: [
-      // stop
       {
         name: 'should resolve a record from peerid as cidv1 in base32',
         reason: 'TODO not implemented in go-ipfs yet: https://github.com/ipfs/go-ipfs/issues/5287'
@@ -172,14 +163,6 @@ describe.only('interface-ipfs-core tests', () => {
 
   tests.ping(defaultCommonFactory, {
     skip: [
-      {
-        name: 'should fail when pinging an unknown peer over pull stream',
-        reason: 'FIXME go-ipfs return success with text: Looking up peer <cid>'
-      },
-      {
-        name: 'should fail when pinging peer that is not available over readable stream',
-        reason: 'FIXME go-ipfs return success with text: Looking up peer <cid>'
-      },
       {
         name: 'should fail when pinging a peer that is not available',
         reason: 'FIXME go-ipfs return success with text: Looking up peer <cid>'
