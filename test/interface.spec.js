@@ -2,12 +2,13 @@
 'use strict'
 
 const tests = require('interface-ipfs-core')
-const { isNode } = require('ipfs-utils/src/env')
 const CommonFactory = require('./utils/interface-common-factory')
 const isWindows = process.platform && process.platform === 'win32'
 
-describe.skip('interface-ipfs-core tests', () => {
+describe.only('interface-ipfs-core tests', () => {
   const defaultCommonFactory = CommonFactory.createAsync()
+
+  tests.root(defaultCommonFactory)
 
   tests.bitswap(defaultCommonFactory, {
     skip: [
@@ -87,50 +88,9 @@ describe.skip('interface-ipfs-core tests', () => {
     ]
   })
 
-  tests.dht(defaultCommonFactory, {
-    skip: [
-      // dht.findpeer
-      {
-        name: 'should fail to find other peer if peer does not exist',
-        reason: 'FIXME checking what is exactly go-ipfs returning https://github.com/ipfs/go-ipfs/issues/3862#issuecomment-294168090'
-      },
-      // dht.findprovs
-      {
-        name: 'should take options to override timeout config',
-        reason: 'FIXME go-ipfs does not support a timeout option'
-      },
-      // dht.get
-      {
-        name: 'should get a value after it was put on another node',
-        reason: 'FIXME go-ipfs errors with  Error: key was not found (type 6) https://github.com/ipfs/go-ipfs/issues/3862'
-      }
-    ]
-  })
+  tests.dht(defaultCommonFactory)
 
-  tests.filesRegular(defaultCommonFactory, {
-    skip: [
-      // .addFromFs
-      isNode ? null : {
-        name: 'addFromFs',
-        reason: 'Not designed to run in the browser'
-      },
-      // .catPullStream
-      {
-        name: 'should export a chunk of a file',
-        reason: 'TODO not implemented in go-ipfs yet'
-      },
-      {
-        name: 'should export a chunk of a file in a Pull Stream',
-        reason: 'TODO not implemented in go-ipfs yet'
-      },
-      {
-        name: 'should export a chunk of a file in a Readable Stream',
-        reason: 'TODO not implemented in go-ipfs yet'
-      }
-    ]
-  })
-
-  tests.filesMFS(defaultCommonFactory, {
+  tests.files(defaultCommonFactory, {
     skip: [
       {
         name: 'should ls directory with long option',

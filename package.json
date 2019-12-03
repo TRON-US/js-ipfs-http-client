@@ -70,7 +70,7 @@
     "browser-process-platform": "~0.1.1",
     "go-ipfs-dep": "^0.4.22",
     "interface-ipfs-core": "^0.124.0",
-    "ipfsd-ctl": "^0.47.1",
+    "ipfsd-ctl": "github:ipfs/js-ipfsd-ctl#fix/do-not-call-shutdown-twice",
     "it-all": "^1.0.1",
     "it-concat": "^1.0.0",
     "it-pipe": "^1.1.0",
