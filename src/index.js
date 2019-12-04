@@ -6,7 +6,8 @@ const multiaddr = require('multiaddr')
 const multibase = require('multibase')
 const multicodec = require('multicodec')
 const multihash = require('multihashes')
-const { globSource, urlSource } = require('ipfs-utils/src/files')
+const globSource = require('ipfs-utils/src/files/glob-source')
+const urlSource = require('ipfs-utils/src/files/url-source')
 
 function ipfsClient (config) {
   return {
