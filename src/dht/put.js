@@ -4,7 +4,7 @@ const CID = require('cids')
 const multiaddr = require('multiaddr')
 const ndjson = require('iterable-ndjson')
 const configure = require('../lib/configure')
-const toIterable = require('../lib/stream-to-iterable')
+const toIterable = require('stream-to-it/source')
 const encodeBufferURIComponent = require('../lib/encode-buffer-uri-component')
 const toCamel = require('../lib/object-to-camel')
 

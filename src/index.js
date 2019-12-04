@@ -7,7 +7,7 @@ const multibase = require('multibase')
 const multicodec = require('multicodec')
 const multihash = require('multihashes')
 const globSource = require('ipfs-utils/src/files/glob-source')
-const urlSource = require('./lib/url-source') // TODO: move to ipfs-utils
+const urlSource = require('ipfs-utils/src/files/url-source')
 
 function ipfsClient (config) {
   return {
