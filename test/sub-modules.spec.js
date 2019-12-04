@@ -160,8 +160,6 @@ describe('submodules', () => {
     const filesRegular = require('../src')()
 
     expect(filesRegular.add).to.be.a('function')
-    expect(filesRegular.addFromFs).to.be.a('function')
-    expect(filesRegular.addFromURL).to.be.a('function')
     expect(filesRegular.get).to.be.a('function')
     expect(filesRegular.cat).to.be.a('function')
     expect(filesRegular.ls).to.be.a('function')
