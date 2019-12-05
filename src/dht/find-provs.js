@@ -11,7 +11,7 @@ module.exports = configure(({ ky }) => {
     options = options || {}
 
     const searchParams = new URLSearchParams(options.searchParams)
-    searchParams.set('arg', `${cid}`)
+    searchParams.set('arg', `${new CID(cid)}`)
     if (options.numProviders) searchParams.set('num-providers', options.numProviders)
     if (options.verbose != null) searchParams.set('verbose', options.verbose)
 

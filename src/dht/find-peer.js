@@ -1,5 +1,6 @@
 'use strict'
 
+const { Buffer } = require('buffer')
 const CID = require('cids')
 const multiaddr = require('multiaddr')
 const ndjson = require('iterable-ndjson')
@@ -11,7 +12,7 @@ module.exports = configure(({ ky }) => {
     options = options || {}
 
     const searchParams = new URLSearchParams(options.searchParams)
-    searchParams.set('arg', `${peerId}`)
+    searchParams.set('arg', `${Buffer.isBuffer(peerId) ? new CID(peerId) : peerId}`)
     if (options.verbose != null) searchParams.set('verbose', options.verbose)
 
     const res = await ky.post('dht/findpeer', {

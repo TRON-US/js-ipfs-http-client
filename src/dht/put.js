@@ -1,5 +1,6 @@
 'use strict'
 
+const { Buffer } = require('buffer')
 const CID = require('cids')
 const multiaddr = require('multiaddr')
 const ndjson = require('iterable-ndjson')
