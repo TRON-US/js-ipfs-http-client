@@ -2,8 +2,10 @@
 
 const CID = require('cids')
 const ndjson = require('iterable-ndjson')
-const configure = require('../lib/configure')
+const multiaddr = require('multiaddr')
 const toIterable = require('stream-to-it/source')
+const configure = require('../lib/configure')
+const toCamel = require('../lib/object-to-camel')
 
 module.exports = configure(({ ky }) => {
   return async function * query (peerId, options) {
@@ -20,11 +22,14 @@ module.exports = configure(({ ky }) => {
       searchParams
     })
 
-    for await (const message of ndjson(toIterable(res.body))) {
-      yield {
-        id: new CID(message.ID),
-        addrs: []
-      }
+    for await (let message of ndjson(toIterable(res.body))) {
+      message = toCamel(message)
+      message.id = new CID(message.id)
+      message.responses = (message.responses || []).map(({ ID, Addrs }) => ({
+        id: new CID(ID),
+        addrs: (Addrs || []).map(a => multiaddr(a))
+      }))
+      yield message
     }
   }
 })
