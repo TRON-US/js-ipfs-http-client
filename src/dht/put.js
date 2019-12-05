@@ -35,6 +35,7 @@ module.exports = configure(({ ky }) => {
       }
 
       message = toCamel(message)
+      message.id = new CID(message.id)
       if (message.responses) {
         message.responses = message.responses.map(({ ID, Addrs }) => ({
           id: new CID(ID),
