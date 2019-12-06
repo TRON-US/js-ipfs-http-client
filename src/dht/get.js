@@ -1,22 +1,24 @@
 'use strict'
 
+const { Buffer } = require('buffer')
 const ndjson = require('iterable-ndjson')
-const configure = require('../lib/configure')
 const toIterable = require('stream-to-it/source')
+const encodeBufferURIComponent = require('../lib/encode-buffer-uri-component')
+const configure = require('../lib/configure')
 
 module.exports = configure(({ ky }) => {
   return async function get (key, options) {
     options = options || {}
 
     const searchParams = new URLSearchParams(options.searchParams)
-    searchParams.set('arg', `${key}`)
     if (options.verbose != null) searchParams.set('verbose', options.verbose)
 
-    const res = await ky.post('dht/get', {
+    key = Buffer.isBuffer(key) ? encodeBufferURIComponent(key) : encodeURIComponent(key)
+
+    const res = await ky.post(`dht/get?key=${key}&${searchParams}`, {
       timeout: options.timeout,
       signal: options.signal,
-      headers: options.headers,
-      searchParams
+      headers: options.headers
     })
 
     for await (const message of ndjson(toIterable(res.body))) {

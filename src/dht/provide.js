@@ -13,7 +13,7 @@ module.exports = configure(({ ky }) => {
     options = options || {}
 
     const searchParams = new URLSearchParams(options.searchParams)
-    cids.forEach(cid => searchParams.append('arg', `${cid}`))
+    cids.forEach(cid => searchParams.append('arg', `${new CID(cid)}`))
     if (options.recursive != null) searchParams.set('recursive', options.recursive)
     if (options.verbose != null) searchParams.set('verbose', options.verbose)
 
@@ -33,11 +33,14 @@ module.exports = configure(({ ky }) => {
       }
 
       message = toCamel(message)
+      message.id = new CID(message.id)
       if (message.responses) {
         message.responses = message.responses.map(({ ID, Addrs }) => ({
           id: new CID(ID),
           addrs: (Addrs || []).map(a => multiaddr(a))
         }))
+      } else {
+        message.responses = []
       }
       yield message
     }
