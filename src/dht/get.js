@@ -13,9 +13,11 @@ module.exports = configure(({ ky }) => {
     const searchParams = new URLSearchParams(options.searchParams)
     if (options.verbose != null) searchParams.set('verbose', options.verbose)
 
-    key = Buffer.isBuffer(key) ? encodeBufferURIComponent(key) : encodeURIComponent(key)
+    if (!Buffer.isBuffer(key)) {
+      throw new Error('invalid key')
+    }
 
-    const res = await ky.post(`dht/get?key=${key}&${searchParams}`, {
+    const res = await ky.post(`dht/get?key=${encodeBufferURIComponent(key)}&${searchParams}`, {
       timeout: options.timeout,
       signal: options.signal,
       headers: options.headers
