@@ -1,6 +1,7 @@
 'use strict'
 
 const ndjson = require('iterable-ndjson')
+const CID = require('cids')
 const configure = require('../lib/configure')
 const toIterable = require('stream-to-it/source')
 const { toFormData } = require('./form-data')
@@ -51,5 +52,5 @@ module.exports = configure(({ ky }) => {
 })
 
 function toCoreInterface ({ name, hash, size }) {
-  return { path: name, hash, size: parseInt(size) }
+  return { path: name, cid: new CID(hash), size: parseInt(size) }
 }
