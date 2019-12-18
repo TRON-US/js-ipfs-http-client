@@ -26,7 +26,7 @@
   <br>
 </p>
 
-> A client library for the BTFS HTTP API, implemented in JavaScript. This client library implements the [interface-ipfs-core](https://github.com/TRON-US/js-btfs-http-client) enabling applications to change between an embedded js-btfs node and any remote BTFS node without having to change the code. In addition, this client library implements a set of utility functions.
+> A client library for the BTFS HTTP API, implemented in JavaScript. This client library implements the [interface-ipfs-core](https://github.com/TRON-US/js-btfs-http-client) enabling applications to change between an embedded js-ipfs node and any remote BTFS node without having to change the code. In addition, this client library implements a set of utility functions.
 
 ## Lead Maintainer
 
@@ -204,7 +204,7 @@ const ipfs = ipfsClient({ timeout: '2m' })
 
 [![BTFS Core API Compatible](https://cdn.rawgit.com/ipfs/interface-ipfs-core/master/img/badge.svg)](https://github.com/ipfs/interface-ipfs-core)
 
-> `js-btfs-http-client` follows the spec defined by [`interface-ipfs-core`](https://github.com/TRON-US/js-btfs-http-client), which concerns the interface to expect from BTFS implementations. This interface is a currently active endeavor. You can use it today to consult the methods available.
+> `js-btfs-http-client` follows the spec defined by [`interface-ipfs-core`](https://github.com/ipfs/interface-js-ipfs-core), which concerns the interface to expect from BTFS implementations. This interface is a currently active endeavor. You can use it today to consult the methods available.
 
 #### Files
 
@@ -380,7 +380,7 @@ Call this on your client instance to return an object containing the `host`, `po
 
 #### Static Types and Utils
 
-Aside from the default export, `ipfs-http-client` exports various types and utilities that are included in the bundle:
+Aside from the default export, `btfs-http-client` exports various types and utilities that are included in the bundle:
 
 - [`isIPFS`](https://www.npmjs.com/package/is-ipfs)
 - [`Buffer`](https://www.npmjs.com/package/buffer)
@@ -410,7 +410,7 @@ We run tests by executing `npm test` in a terminal window. This will run both No
 
 The js-btfs-http-client is a work in progress. As such, there's a few things you can do right now to help out:
 
-- **[Check out the existing issues](https://github.com/ipfs/js-ipfs-http-client/issues)**!
+- **[Check out the existing issues](https://github.com/ipfs/js-btfs-http-client/issues)**!
 - **Perform code reviews**. More eyes will help a) speed the project along b) ensure quality and c) reduce possible future bugs.
 - **Add tests**. There can never be enough tests. Note that interface tests exist inside [`interface-ipfs-core`](https://github.com/ipfs/interface-ipfs-core/tree/master/js/src).
 - **Contribute to the [FAQ repository](https://github.com/ipfs/faq/issues)** with any questions you have about BTFS or any of the relevant technology. A good example would be asking, 'What is a merkledag tree?'. If you don't know a term, odds are, someone else doesn't either. Eventually, we should have a good understanding of where we need to improve communications and teaching together to make BTFS and IPN better.

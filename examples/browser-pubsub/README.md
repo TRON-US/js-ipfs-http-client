@@ -2,12 +2,12 @@
 
 > Use pubsub in the browser!
 
-This example is a demo web application that allows you to connect to an BTFS node, subscribe to a pubsub topic and send/receive messages. We'll start two IPFS nodes and two browsers and use the `ipfs-http-client` to instruct each node to listen to a pubsub topic and send/receive pubsub messages to/from each other. We're aiming for something like this:
+This example is a demo web application that allows you to connect to an BTFS node, subscribe to a pubsub topic and send/receive messages. We'll start two BTFS nodes and two browsers and use the `btfs-http-client` to instruct each node to listen to a pubsub topic and send/receive pubsub messages to/from each other. We're aiming for something like this:
 
 ```
    +-----------+                   +-----------+
    |           +------------------->           |
-   |  js-ipfs  |      pubsub       |  go-ipfs  |
+   |  js-ipfs  |      pubsub       |  go-btfs  |
    |           <-------------------+           |
    +-----^-----+                   +-----^-----+
          |                               |
@@ -69,7 +69,7 @@ jsipfs daemon --enable-pubsub-experiment
 
 ### Install and start the Go BTFS node
 
-Head over to https://dist.ipfs.io/#go-ipfs and hit the "Download go-btfs" button. Extract the archive and read the instructions to install.
+Head over to https://github.com/TRON-US/btfs-binary-releases and read the instructions to install.
 
 After installation:
 
@@ -89,6 +89,6 @@ In the "API ADDR" field enter `/ip4/127.0.0.1/tcp/5001` in one browser and `/ip4
 
 This connects each browser to a BTFS node and now from the comfort of our browser we can instruct each node to listen to a pubsub topic and send/receive pubsub messages to each other.
 
-> N.B. Sibnce our two BTFS nodes are running on the same network they should have already found each other y MDNS. So you probably won't need to use the "CONNECT TO PEER" field. If you find your pubsub messages aren't getting through, check the output from your `jsipfs daemon` command and find the first address listed in "Swarm listening on" - it'll look like `/ip4/127.0.0.1/tcp/4002/ipfs/Qm...`. Paste this address into the "CONNECT TO PEER" field for the browser that is connected to your go-btfs node and hit connect.
+> N.B. Since our two BTFS nodes are running on the same network they should have already found each other y MDNS. So you probably won't need to use the "CONNECT TO PEER" field. If you find your pubsub messages aren't getting through, check the output from your `jsipfs daemon` command and find the first address listed in "Swarm listening on" - it'll look like `/ip4/127.0.0.1/tcp/4002/ipfs/Qm...`. Paste this address into the "CONNECT TO PEER" field for the browser that is connected to your go-btfs node and hit connect.
 
 Finally, use the "SUBSCRIBE TO PUBSUB TOPIC" and "SEND MESSAGE" fields to do some pubsub-ing, you should see messages sent from one browser appear in the log of the other (provided they're both subscribed to the same topic).
