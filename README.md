@@ -3,22 +3,9 @@
 </h1>
 
 <h3 align="center">The JavaScript HTTP client library for BTFS implementations.</h3>
-
-<p align="center">
-  <a href="http://ipn.io"><img src="https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square" /></a>
-  <a href="http://ipfs.io/"><img src="https://img.shields.io/badge/project-IPFS-blue.svg?style=flat-square" /></a>
-  <a href="http://webchat.freenode.net/?channels=%23ipfs"><img src="https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square" /></a>
-  <a href="https://waffle.io/ipfs/js-ipfs"><img src="https://img.shields.io/badge/pm-waffle-blue.svg?style=flat-square" /></a>
-  <a href="https://github.com/ipfs/interface-ipfs-core"><img src="https://img.shields.io/badge/interface--ipfs--core-API%20Docs-blue.svg?style=flat-square"></a>
-</p>
-
 <p align="center">
   <a href="https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fipfs%2Fjs-ipfs-http-client?ref=badge_small" alt="FOSSA Status"><img src="https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fipfs%2Fjs-ipfs-http-client.svg?type=small"/></a>
-  <a href="https://travis-ci.com/ipfs/js-ipfs-http-client"><img src="https://flat.badgen.net/travis/ipfs/js-ipfs-http-client" /></a>
-  <a href="https://codecov.io/gh/ipfs/js-ipfs-http-client"><img src="https://img.shields.io/codecov/c/github/ipfs/js-ipfs-http-client/master.svg?style=flat-square"></a>
-   <a href="https://bundlephobia.com/result?p=ipfs-http-client"><img src="https://flat.badgen.net/bundlephobia/minzip/ipfs-http-client"></a>
   <br>
-  <a href="https://david-dm.org/ipfs/js-ipfs-http-client"><img src="https://david-dm.org/ipfs/js-ipfs-http-client.svg?style=flat-square" /></a>
   <a href="https://github.com/feross/standard"><img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square"></a>
   <a href="https://github.com/RichardLitt/standard-readme"><img src="https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square" /></a>
   <a href=""><img src="https://img.shields.io/badge/npm-%3E%3D3.0.0-orange.svg?style=flat-square" /></a>
@@ -28,13 +15,8 @@
 
 > A client library for the BTFS HTTP API, implemented in JavaScript. This client library implements the [interface-ipfs-core](https://github.com/TRON-US/js-btfs-http-client) enabling applications to change between an embedded js-ipfs node and any remote BTFS node without having to change the code. In addition, this client library implements a set of utility functions.
 
-## Lead Maintainer
-
-[Alan Shaw](http://github.com/alanshaw).
-
 ## Table of Contents
 
-- [Lead Maintainer](#lead-maintainer)
 - [Table of Contents](#table-of-contents)
 - [Install](#install)
   - [Running the daemon with the right port](#running-the-daemon-with-the-right-port)
@@ -201,8 +183,6 @@ const ipfs = ipfsClient({ timeout: '2m' })
 ## Usage
 
 ### API
-
-[![BTFS Core API Compatible](https://cdn.rawgit.com/ipfs/interface-ipfs-core/master/img/badge.svg)](https://github.com/ipfs/interface-ipfs-core)
 
 > `js-btfs-http-client` follows the spec defined by [`interface-ipfs-core`](https://github.com/ipfs/interface-js-ipfs-core), which concerns the interface to expect from BTFS implementations. This interface is a currently active endeavor. You can use it today to consult the methods available.
 
@@ -414,14 +394,6 @@ The js-btfs-http-client is a work in progress. As such, there's a few things you
 - **Perform code reviews**. More eyes will help a) speed the project along b) ensure quality and c) reduce possible future bugs.
 - **Add tests**. There can never be enough tests. Note that interface tests exist inside [`interface-ipfs-core`](https://github.com/ipfs/interface-ipfs-core/tree/master/js/src).
 - **Contribute to the [FAQ repository](https://github.com/ipfs/faq/issues)** with any questions you have about BTFS or any of the relevant technology. A good example would be asking, 'What is a merkledag tree?'. If you don't know a term, odds are, someone else doesn't either. Eventually, we should have a good understanding of where we need to improve communications and teaching together to make BTFS and IPN better.
-
-**Want to hack on BTFS?**
-
-[![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/CONTRIBUTING.md)
-
-## Historical context
-
-This module started as a direct mapping from the go-btfs cli to a JavaScript implementation, although this was useful and familiar to a lot of developers that were coming to BTFS for the first time, it also created some confusion on how to operate the core of BTFS and have access to the full capacity of the protocol. After much consideration, we decided to create `interface-ipfs-core` with the goal of standardizing the interface of a core implementation of BTFS, and keep the utility functions the BTFS community learned to use and love, such as reading files from disk and storing them directly to BTFS.
 
 ## License
 
