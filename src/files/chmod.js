@@ -1,21 +1,20 @@
 'use strict'
 
-const CID = require('cids')
 const configure = require('../lib/configure')
-const { findSources } = require('./utils')
+const modeToString = require('../lib/mode-to-string')
 
 module.exports = configure(({ ky }) => {
-  return (...args) => {
-    const { sources, options } = findSources(args)
+  return function chmod (path, mode, options) {
+    options = options || {}
 
     const searchParams = new URLSearchParams(options.searchParams)
-    sources.forEach(src => searchParams.append('arg', CID.isCID(src) ? `/ipfs/${src}` : src))
+    searchParams.append('arg', path)
+    searchParams.append('mode', modeToString(mode))
     if (options.flush != null) searchParams.set('flush', options.flush)
     if (options.hashAlg) searchParams.set('hash', options.hashAlg)
     if (options.parents != null) searchParams.set('parents', options.parents)
-    if (options.shardSplitThreshold != null) searchParams.set('shardSplitThreshold', options.shardSplitThreshold)
 
-    return ky.post('files/mv', {
+    return ky.post('files/chmod', {
       timeout: options.timeout,
       signal: options.signal,
       headers: options.headers,
