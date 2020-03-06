@@ -11,7 +11,14 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "ipfs-http-client": "../.."
+    "bigi": "^1.4.2",
+    "btfs-http-client": "../..",
+    "coinstring": "^2.3.0",
+    "ecurve": "^1.0.6",
+    "google-protobuf": "^3.11.4",
+    "libp2p-crypto-secp256k1": "^0.4.1",
+    "peer-id": "^0.13.9",
+    "src": "^1.1.2"
   },
   "devDependencies": {
     "react": "~16.6.3",
