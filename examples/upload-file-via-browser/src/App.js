@@ -224,7 +224,7 @@ class App extends React.Component {
         .then((response) => {
           console.log(response)
           btfsId = response[0].hash
-          console.log(ipfsId)
+          console.log(btfsId)
           this.setState({ added_file_hash: btfsId })
         }).catch((err) => {
       console.error(err)
