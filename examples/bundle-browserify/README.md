@@ -7,7 +7,6 @@
 As for any js-btfs-http-client example, **you need a running BTFS daemon**, you learn how to do that here:
 
 - [Spawn a go-btfs daemon](https://ipfs.io/docs/getting-started/)
-- [Spawn a js-ipfs daemon](https://github.com/ipfs/js-ipfs#usage)
 
 **Note:** If you load your app from a different domain than the one the daemon is running (most probably), you will need to set up CORS, see https://github.com/TRON-US/js-btfs-http-client#cors to learn how to do that.
 

@@ -1,8 +1,7 @@
 'use strict'
 
-const ndjson = require('iterable-ndjson')
+require('iterable-ndjson')
 const configure = require('../lib/configure')
-const toIterable = require('../lib/stream-to-iterable')
 
 module.exports = configure(({ ky }) => {
   return async function * status (input, options) {
@@ -10,7 +9,7 @@ module.exports = configure(({ ky }) => {
 
     const searchParams = new URLSearchParams()
 
-    searchParams.set("arg",input)
+    searchParams.set("arg",input.SessionId)
 
     var res = await ky.post( 'storage/upload/status', {
       timeout: options.timeout,

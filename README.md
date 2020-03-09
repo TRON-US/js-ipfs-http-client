@@ -48,7 +48,7 @@
 This module uses node.js, and can be installed through npm:
 
 ```bash
-npm install --save ipfs-http-client
+npm install --save btfs-http-client
 ```
 
 We support both the Current and Active LTS versions of Node.js. Please see [nodejs.org](https://nodejs.org/) for what these currently are.
@@ -72,25 +72,25 @@ To interact with the API, you need to have a local daemon running. It needs to b
 ### Importing the module and usage
 
 ```javascript
-const ipfsClient = require('ipfs-http-client')
+const btfsClient = require('btfs-http-client')
 
 // connect to ipfs daemon API server
-const ipfs = ipfsClient('http://localhost:5001') // (the default in Node.js)
+const btfs = btfsClient('http://localhost:5001') // (the default in Node.js)
 
 // or connect with multiaddr
-const ipfs = ipfsClient('/ip4/127.0.0.1/tcp/5001')
+const btfs = btfsClient('/ip4/127.0.0.1/tcp/5001')
 
 // or using options
-const ipfs = ipfsClient({ host: 'localhost', port: '5001', protocol: 'http' })
+const btfs = btfsClient({ host: 'localhost', port: '5001', protocol: 'http' })
 
 // or specifying a specific API path
-const ipfs = ipfsClient({ host: '1.1.1.1', port: '80', apiPath: '/ipfs/api/v0' })
+const btfs = btfsClient({ host: '1.1.1.1', port: '80', apiPath: '/btfs/api/v0' })
 ```
 
 ### Importing a sub-module and usage
 
 ```javascript
-const bitswap = require('ipfs-http-client/src/bitswap')('/ip4/127.0.0.1/tcp/5001')
+const bitswap = require('btfs-http-client/src/bitswap')('/ip4/127.0.0.1/tcp/5001')
 
 const list = await bitswap.wantlist(key)
 // ...
@@ -137,13 +137,13 @@ crossorigin="anonymous"></script>
 CDN-based BTFS API provides the `IpfsHttpClient` constructor as a method of the global `window` object. Example:
 
 ```js
-const ipfs = window.IpfsHttpClient({ host: 'localhost', port: 5001 })
+const btfs = window.BtfsHttpClient({ host: 'localhost', port: 5001 })
 ```
 
 If you omit the host and port, the client will parse `window.host`, and use this information. This also works, and can be useful if you want to write apps that can be run from multiple different gateways:
 
 ```js
-const ipfs = window.IpfsHttpClient()
+const btfs = window.BtfsHttpClient()
 ```
 
 ### CORS
@@ -151,8 +151,8 @@ const ipfs = window.IpfsHttpClient()
 In a web browser BTFS HTTP client (either browserified or CDN-based) might encounter an error saying that the origin is not allowed. This would be a CORS ("Cross Origin Resource Sharing") failure: BTFS servers are designed to reject requests from unknown domains by default. You can whitelist the domain that you are calling from by changing your ipfs config like this:
 
 ```console
-$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin  '["http://example.com"]'
-$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
+$ btfs config --json API.HTTPHeaders.Access-Control-Allow-Origin  '["http://example.com"]'
+$ btfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
 ```
 
 ### Custom Headers
@@ -160,7 +160,7 @@ $ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST
 If you wish to send custom headers with each request made by this library, for example, the Authorization header. You can use the config to do so:
 
 ```js
-const ipfs = ipfsClient({
+const btfs = btfsClient({
   host: 'localhost',
   port: 5001,
   protocol: 'http',
@@ -176,9 +176,9 @@ To set a global timeout for _all_ requests pass a value for the `timeout` option
 
 ```js
 // Timeout after 10 seconds
-const ipfs = ipfsClient({ timeout: 10000 })
+const btfs = btfsClient({ timeout: 10000 })
 // Timeout after 2 minutes
-const ipfs = ipfsClient({ timeout: '2m' })
+const btfs = btfsClient({ timeout: '2m' })
 // see https://www.npmjs.com/package/parse-duration for valid string values
 ```
 
@@ -188,6 +188,18 @@ const ipfs = ipfsClient({ timeout: '2m' })
 
 > `js-btfs-http-client` follows the spec defined by [`interface-ipfs-core`](https://github.com/ipfs/interface-js-ipfs-core), which concerns the interface to expect from BTFS implementations. This interface is a currently active endeavor. You can use it today to consult the methods available.
 
+
+#### Renting and hosting
+
+- Storage upload API
+    - [`btfs.uplodad([inputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+- Offline signing API
+    - [`btfs.getContracts([inputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+    - [`btfs.getUnsigned([inputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+    - [`btfs.sign([inputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+    - [`btfs.signBatch([inputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+    - [`btfs.statusSign([iputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+             
 #### Files
 
 - [Regular Files API](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md)
@@ -195,6 +207,7 @@ const ipfs = ipfsClient({ timeout: '2m' })
   - [`ipfs.cat(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#cat)
   - [`ipfs.get(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#get)
   - [`ipfs.ls(ipfsPath)`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+  
 - [MFS (mutable file system) specific](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#mutable-file-system)
   - [`ipfs.files.cp([from, to])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filescp)
   - [`ipfs.files.flush([path])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filesflush)
@@ -350,9 +363,9 @@ Aside from the default export, `btfs-http-client` exports various types and util
 These can be accessed like this, for example:
 
 ```js
-const { CID } = require('ipfs-http-client')
+const { CID } = require('btfs-http-client')
 // ...or from an es-module:
-import { CID } from 'ipfs-http-client'
+import { CID } from 'btfs-http-client'
 ```
 
 ##### Glob source
@@ -372,11 +385,11 @@ Returns an async iterable that yields `{ path, content }` objects suitable for p
 ###### Example
 
 ```js
-const IpfsHttpClient = require('ipfs-http-client')
-const { globSource } = IpfsHttpClient
-const ipfs = IpfsHttpClient()
+const BtfsHttpClient = require('btfs-http-client')
+const { globSource } = BtfsHttpClient
+const btfs = BtfsHttpClient()
 
-for await (const file of ipfs.add(globSource('./docs', { recursive: true }))) {
+for await (const file of btfs.add(globSource('./docs', { recursive: true }))) {
   console.log(file)
 }
 /*
@@ -402,14 +415,14 @@ A utility to allow content from the internet to be easily added to IPFS.
 
 - `url`: A string URL or [`URL`](https://developer.mozilla.org/en-US/docs/Web/API/URL) instance to send HTTP GET request to
 
-Returns an async iterable that yields `{ path, content }` objects suitable for passing to `ipfs.add`.
+Returns an async iterable that yields `{ path, content }` objects suitable for passing to `btfs.add`.
 
 ###### Example
 
 ```js
-const IpfsHttpClient = require('ipfs-http-client')
-const { urlSource } = IpfsHttpClient
-const ipfs = IpfsHttpClient()
+const BtfsHttpClient = require('btfs-http-client')
+const { urlSource } = BtfsHttpClient
+const btfs = BtfsHttpClient()
 
 for await (const file of ipfs.add(urlSource('https://ipfs.io/images/ipfs-logo.svg'))) {
   console.log(file)
@@ -433,10 +446,10 @@ We run tests by executing `npm test` in a terminal window. This will run both No
 
 The js-btfs-http-client is a work in progress. As such, there's a few things you can do right now to help out:
 
-- **[Check out the existing issues](https://github.com/ipfs/js-btfs-http-client/issues)**!
+- **[Check out the existing issues](https://github.com/TRON-US/js-btfs-http-client/issues)**!
 - **Perform code reviews**. More eyes will help a) speed the project along b) ensure quality and c) reduce possible future bugs.
 - **Add tests**. There can never be enough tests. Note that interface tests exist inside [`interface-ipfs-core`](https://github.com/ipfs/interface-ipfs-core/tree/master/js/src).
-- **Contribute to the [FAQ repository](https://github.com/ipfs/faq/issues)** with any questions you have about BTFS or any of the relevant technology. A good example would be asking, 'What is a merkledag tree?'. If you don't know a term, odds are, someone else doesn't either. Eventually, we should have a good understanding of where we need to improve communications and teaching together to make BTFS and IPN better.
+- **Contribute to the [FAQ repository](https://github.com/TRON-US/faq/issues)** with any questions you have about BTFS or any of the relevant technology. A good example would be asking, 'What is a merkledag tree?'. If you don't know a term, odds are, someone else doesn't either. Eventually, we should have a good understanding of where we need to improve communications and teaching together to make BTFS and IPN better.
 
 ## License
 

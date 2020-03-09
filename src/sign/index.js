@@ -1,13 +1,11 @@
 'use strict'
-const ndjson = require('iterable-ndjson')
+require('../../protos/guard_pb')
+require('../../protos/escrow_pb')
+require('../../protos/ledger_pb')
 const configure = require('../lib/configure')
 const toCamel = require('../lib/object-to-camel')
 const config = require('../../config')
-const protoGuard = require('../../protos/guard_pb')
-const protoEscrow = require('../../protos/escrow_pb')
-const protoLedger = require('../../protos/ledger_pb')
 const peerId = require('peer-id')
-var BigInteger = require('bigi')
 var EC = require('elliptic').ec
 
 function bnToBuf(bn) {
@@ -60,8 +58,6 @@ var signBalanceContract = function () {
 var signPayChanContract = function (unsigned, totalPrice) {
   return new Promise(   async (resolve, reject) => {
     const cryptoKeys = require('libp2p-crypto/src/keys')
-    const cryptoKeysSEC = require('libp2p-crypto-secp256k1')
-    const libp2pCrypto = require('libp2p-crypto')
 
     const idPriv = await peerId.createFromPrivKey(Buffer.from(config.PrivKey, 'base64')) //get the private key
     var pubKeyBytes = idPriv._pubKey.bytes //get byte array of public key
@@ -70,8 +66,7 @@ var signPayChanContract = function (unsigned, totalPrice) {
     var escrowPubKey = await peerId.createFromPubKey(unsignedBytes) //escrowPubKey, err := ic.UnmarshalPublicKey(unsignedBytes)
     const pubKey = await cryptoKeys.unmarshalPublicKey(escrowPubKey._pubKey.bytes,cryptoKeys.keysPBM.KeyType.Secp256k1)
     var toAddress = rawFullPubKey(pubKey._key)
-
-    //const pubKeyObj = await cryptoKeysSEC().unmarshalSecp256k1PublicKey(escrowPubKey)
+    
     var buyerPubKey = await peerId.createFromPubKey(pubKeyBytes) //get the private key//buyerPubKey, err := crypto.ToPubKey(utils.PublicKey)
 
     //var bPubKey = await cryptoKeys.unmarshalPublicKey(idPriv._pubKey.bytes)
@@ -108,24 +103,10 @@ var signPayRequestContract = function (unsigned) {
     var payerPubKey = await peerId.createFromPubKey(pubKeyBytes) //get the private key//buyerPubKey, err := crypto.ToPubKey(utils.PublicKey)
     var rawFull = rawFullPubKey(payerPubKey._pubKey._key)
 
-    /*
-        payinReq := &escrowpb.PayinRequest{
-            PayinId:           result.Result.PayinId,
-            BuyerAddress:      raw,
-            BuyerChannelState: chanState,
-        }
-    */
     var payInRequest = proto.escrow.PayinRequest.deserializeBinary()
         .setPayinId(result.getResult().getPayinId()).setBuyerAddress(rawFull).setBuyerChannelState(buyerChannelState)
     //payinSig, err := crypto.Sign(privKey, payinReq)
     var payinSig = await idPriv.privKey.sign(payInRequest.serializeBinary())
-
-    /*
-    signedPayinReq := &escrowpb.SignedPayinRequest{
-			Request:        payinReq,
-			BuyerSignature: payinSig,
-		}
-     */
     var signedPayinReq = proto.escrow.SignedPayinRequest.deserializeBinary().setRequest(payInRequest).setBuyerSignature(payinSig)
     //signedPayinReqBytes, err := proto.Marshal(signedPayinReq)
     var signedPayinReqBytes = signedPayinReq.serializeBinary()

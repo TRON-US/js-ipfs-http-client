@@ -1,8 +1,9 @@
 'use strict'
 
+require('../lib/stream-to-iterable')
+require('../lib/object-to-camel')
+
 const configure = require('../lib/configure')
-const toIterable = require('../lib/stream-to-iterable')
-const toCamel = require('../lib/object-to-camel')
 const config = require('../../config')
 const peerId = require('peer-id')
 

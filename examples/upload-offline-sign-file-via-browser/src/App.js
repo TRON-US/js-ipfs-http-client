@@ -66,7 +66,10 @@ class App extends React.Component {
 
   getStatus(event) {
     console.log("Here is the session id:" + this.state.added_session_id)
-    this.btfs.statusSign(this.state.added_session_id, {}).then(
+      let input  = {
+          SessionId: this.state.added_session_id,
+      }
+    this.btfs.statusSign(input, {}).then(
         (response) => {
           this.state.added_session_status = response[0].Status
           this.state.added_status_response =  response[0].Message
@@ -275,17 +278,22 @@ class App extends React.Component {
         <div>
           <form id="myKeys" onSubmit={this.handleSubmit}>
           </form>
-            <h2>Offline signing demonstatration</h2>
+            <h2>File upload demonstatration</h2>
           <form id='captureMedia' onSubmit={this.handleSubmit}>
             <input type='file' onChange={this.captureFile} />
             <label htmlFor='keepFilename'><input type='checkbox' id='keepFilename' name='keepFilename' /> keep filename</label>
           </form>
+            <div>
+                <a target='_blank'
+                   href={'https://ipfs.io/ipfs/' + this.state.added_file_hash}>
+                    {this.state.added_file_hash}
+                </a>
+            </div>
+            <h2>Offline signing demonstatration</h2>
           <form id='captureMedia' onSubmit={this.handleSubmit}>
             <input type='text' id='filehash' name='filehash' value={this.state.added_file_hash}/><br/>
             <button onClick={this.upload}>Upload file hash</button>
           </form>
-          <br/>
-          <br/>
           <div id="contractStatus">
           </div>
         </div>

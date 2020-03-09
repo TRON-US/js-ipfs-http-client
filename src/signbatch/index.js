@@ -10,7 +10,7 @@ const peerId = require('peer-id')
 
 var signContract = function (contract, sessionStatus) {
   return new Promise(   async (resolve, reject) => {
-      var by = Buffer.from(contract,'base64') // contract in string <- 1. OK
+      var by = Buffer.from(contract,'base64') //
       const id = await peerId.createFromPrivKey(Buffer.from(config.PrivKey, 'base64'))
       let raw
       if (sessionStatus == 'initSignReadyEscrow'){
