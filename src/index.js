@@ -29,10 +29,10 @@ function btfsClient(config) {
   //offline signing
   const upload = require('./upload')(config)
   const statusSign = require('./status')(config)
-  const getContracts = require('./getbatch')(config)
+  const getBatch = require('./getbatch')(config)
   const sign = require('./sign')(config)
   const signBatch = require('./signbatch')(config)
-  const getUnsigned = require('./getunsigned')(config)
+  const getUnsignedData = require('./getunsigned')(config)
 
   const api = {
     add: (input, options, callback) => {
@@ -56,19 +56,19 @@ function btfsClient(config) {
       }
       return nodeify(collectify(statusSign)(input, options), callback)
     },
-    getContracts: (input, options, callback) => {
+    getBatch: (input, options, callback) => {
       if (typeof options == 'function') {
         callback = options
         options = {}
       }
-      return nodeify(collectify(getContracts)(input, options), callback)
+      return nodeify(collectify(getBatch)(input, options), callback)
     },
-    getUnsigned: (input, options, callback) => {
+    getUnsignedData: (input, options, callback) => {
       if (typeof options == 'function') {
         callback = options
         options = {}
       }
-      return nodeify(collectify(getUnsigned)(input, options), callback)
+      return nodeify(collectify(getUnsignedData)(input, options), callback)
     },
     sign: (input, options, callback) => {
       if (typeof options == 'function') {

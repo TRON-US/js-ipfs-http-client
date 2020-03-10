@@ -26,11 +26,10 @@ class App extends React.Component {
     //offline signing
     this.upload = this.upload.bind(this)
     this.displayStatus = this.displayStatus.bind(this)
-    this.signbatch = this.signbatch.bind(this)
+    this.signBatch = this.signBatch.bind(this)
     this.sign = this.sign.bind(this)
-    this.getbatch = this.getbatch.bind(this)
-    this.getunsigneddata = this.getunsigneddata.bind(this)
-    this.loadKeysSubmit = this.loadKeysSubmit.bind(this)
+    this.getBatch = this.getBatch.bind(this)
+    this.getUnsignedData = this.getUnsignedData.bind(this)
 
     this.statusTimer = null
     this.time = Date.now()
@@ -96,7 +95,7 @@ class App extends React.Component {
     })
   }
 
-  signbatch(event, contracts) {
+  signBatch(event, contracts) {
     let input  = {
       SessionId: this.state.added_session_id,
       SessionStatus: this.state.added_session_status,
@@ -112,14 +111,14 @@ class App extends React.Component {
     })
   }
 
-  getbatch(event) {
+  getBatch(event) {
     let input  = {
       SessionId: this.state.added_session_id,
       SessionStatus: this.state.added_session_status,
       Hash: this.state.added_file_hash,
       TimeNonce: this.time
     }
-    this.btfs.getContracts(input, {})
+    this.btfs.getBatch(input, {})
         .then((response) => {
           var Contract
           var Key
@@ -137,14 +136,14 @@ class App extends React.Component {
     })
   }
 
-    getunsigneddata(event) {
+  getUnsignedData(event) {
     let input  = {
         SessionId: this.state.added_session_id,
         SessionStatus: this.state.added_session_status,
         Hash: this.state.added_file_hash,
         TimeNonce: this.time
     }
-        this.btfs.getUnsigned(input, {})
+        this.btfs.getUnsignedData(input, {})
         .then((response) => {
             console.log("Here is the response of getunsigneddata: " + response[0].Unsigned)
             input.Unsigned = response[0].Unsigned
@@ -180,13 +179,13 @@ class App extends React.Component {
         case  "initSignReadyGuard":
           //alert("Here is the signing status of the current session and session id: " + status + ":" + this.state.added_session_id)
           this.addStatus(status)
-          this.getbatch(event)
+          this.getBatch(event)
           break
         case "balanceSignReady":
         case "payChannelSignReady":
         case "payRequestSignReady":
         case "guardSignReady":
-          this.getunsigneddata(event)
+          this.getUnsignedData(event)
               this.addStatus(status)
               break
         case "init":
@@ -263,15 +262,7 @@ class App extends React.Component {
   handleSubmit (event) {
     event.preventDefault()
   }
-
-  loadKeysSubmit (event) {
-    this.signPrivateKey = document.getElementById("privateKey")
-    this.signPublicKey = document.getElementById("publicKey")
-    this.peerId = document.getElementById("peerId")
-    console.log("PrivateKey :"+ this.signPrivateKey)
-    console.log("PublicKey :"+ this.signPublicKey)
-    console.log("PeerId :"+ this.peerId)
-  }
+  
 
   render () {
     return (
