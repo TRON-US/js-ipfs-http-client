@@ -1,4 +1,4 @@
-# Bundle js-ipfs-http-client with Webpack!
+# Bundle js-btfs-http-client with Webpack!
 
 > In this example, you will find a boilerplate you can use to guide yourself into bundling js-btfs-http-client with webpack, so that you can use it in your own web app!
 
@@ -6,16 +6,15 @@
 
 As for any js-btfs-http-client example, **you need a running IPFS daemon**, you learn how to do that here:
 
-- [Spawn a go-btfs daemon](https://ipfs.io/docs/getting-started/)
-- [Spawn a js-ipfs daemon](https://github.com/ipfs/js-ipfs#usage)
+- [Spawn a go-btfs daemon](https://docs.btfs.io/docs/testnet-setup)
 
 **Note:** If you load your app from a different domain than the one the daemon is running (most probably), you will need to set up CORS, see https://github.com/TRON-US/js-btfs-http-client#cors#cors to learn how to do that.
 
-A quick (and dirty way to get it done) is:
+A quick (and dirty) way to get it done is:
 
 ```bash
-> ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
-> ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials "[\"true\"]"
+> btfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+> btfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials "[\"true\"]"
 ```
 
 ## Run this example

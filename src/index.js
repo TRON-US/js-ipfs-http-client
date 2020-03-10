@@ -17,7 +17,7 @@ const toStream = require('it-to-stream')
 const BufferList = require('bl/BufferList')
 const { concatify, collectify, pullify, streamify } = require('./lib/converters')
 
-function ipfsClient (config) {
+function btfsClient(config) {
   const add = require('./add')(config)
   const addFromFs = require('./add-from-fs')(config)
   const addFromURL = require('./add-from-url')(config)
@@ -26,6 +26,13 @@ function ipfsClient (config) {
   const ls = require('./ls')(config)
   const ping = require('./ping')(config)
   const refs = require('./refs')(config)
+  //offline signing
+  const upload = require('./upload')(config)
+  const statusSign = require('./status')(config)
+  const getBatch = require('./getbatch')(config)
+  const sign = require('./sign')(config)
+  const signBatch = require('./signbatch')(config)
+  const getUnsignedData = require('./getunsigned')(config)
 
   const api = {
     add: (input, options, callback) => {
@@ -34,6 +41,48 @@ function ipfsClient (config) {
         options = {}
       }
       return nodeify(collectify(add)(input, options), callback)
+    },
+    upload: (input, options, callback) => {
+      if (typeof options == 'function') {
+        callback = options
+        options = {}
+      }
+      return nodeify(collectify(upload)(input, options), callback)
+    },
+    statusSign: (input, options, callback) => {
+      if (typeof options == 'function') {
+        callback = options
+        options = {}
+      }
+      return nodeify(collectify(statusSign)(input, options), callback)
+    },
+    getBatch: (input, options, callback) => {
+      if (typeof options == 'function') {
+        callback = options
+        options = {}
+      }
+      return nodeify(collectify(getBatch)(input, options), callback)
+    },
+    getUnsignedData: (input, options, callback) => {
+      if (typeof options == 'function') {
+        callback = options
+        options = {}
+      }
+      return nodeify(collectify(getUnsignedData)(input, options), callback)
+    },
+    sign: (input, options, callback) => {
+      if (typeof options == 'function') {
+        callback = options
+        options = {}
+      }
+      return nodeify(collectify(sign)(input, options), callback)
+    },
+    signBatch: (input, options, pKey, callback) => {
+      if (typeof options == 'function') {
+        callback = options
+        options = {}
+      }
+      return nodeify(collectify(signBatch)(input, options, pKey), callback)
     },
     addReadableStream: streamify.transform(add),
     addPullStream: pullify.transform(add),
@@ -154,6 +203,6 @@ function ipfsClient (config) {
   return api
 }
 
-Object.assign(ipfsClient, { isIPFS, Buffer, CID, multiaddr, multibase, multicodec, multihash, PeerId, PeerInfo })
+Object.assign(btfsClient, { isIPFS, Buffer, CID, multiaddr, multibase, multicodec, multihash, PeerId, PeerInfo })
 
-module.exports = ipfsClient
+module.exports = btfsClient

@@ -2,7 +2,8 @@
 'use strict'
 
 const { expect } = require('interface-ipfs-core/src/utils/mocha')
-const f = require('./utils/factory')
+const all = require('it-all')
+const f = require('./utils/factory')()
 
 describe('stats', function () {
   this.timeout(50 * 1000) // slow CI
@@ -31,7 +32,7 @@ describe('stats', function () {
   })
 
   it('.stats.bw', async () => {
-    const res = await ipfs.stats.bw()
+    const res = (await all(ipfs.stats.bw()))[0]
 
     expect(res).to.exist()
     expect(res).to.have.a.property('totalIn')

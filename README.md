@@ -35,6 +35,8 @@
     - [Additional Options](#additional-options)
     - [Instance Utils](#instance-utils)
     - [Static Types and Utils](#static-types-and-utils)
+      - [Glob source](#glob-source)
+      - [URL source](#url-source)
 - [Development](#development)
   - [Testing](#testing)
 - [Contribute](#contribute)
@@ -46,7 +48,7 @@
 This module uses node.js, and can be installed through npm:
 
 ```bash
-npm install --save ipfs-http-client
+npm install --save btfs-http-client
 ```
 
 We support both the Current and Active LTS versions of Node.js. Please see [nodejs.org](https://nodejs.org/) for what these currently are.
@@ -70,25 +72,25 @@ To interact with the API, you need to have a local daemon running. It needs to b
 ### Importing the module and usage
 
 ```javascript
-const ipfsClient = require('ipfs-http-client')
+const btfsClient = require('btfs-http-client')
 
 // connect to ipfs daemon API server
-const ipfs = ipfsClient('http://localhost:5001') // (the default in Node.js)
+const btfs = btfsClient('http://localhost:5001') // (the default in Node.js)
 
 // or connect with multiaddr
-const ipfs = ipfsClient('/ip4/127.0.0.1/tcp/5001')
+const btfs = btfsClient('/ip4/127.0.0.1/tcp/5001')
 
 // or using options
-const ipfs = ipfsClient({ host: 'localhost', port: '5001', protocol: 'http' })
+const btfs = btfsClient({ host: 'localhost', port: '5001', protocol: 'http' })
 
 // or specifying a specific API path
-const ipfs = ipfsClient({ host: '1.1.1.1', port: '80', apiPath: '/ipfs/api/v0' })
+const btfs = btfsClient({ host: '1.1.1.1', port: '80', apiPath: '/btfs/api/v0' })
 ```
 
 ### Importing a sub-module and usage
 
 ```javascript
-const bitswap = require('ipfs-http-client/src/bitswap')('/ip4/127.0.0.1/tcp/5001')
+const bitswap = require('btfs-http-client/src/bitswap')('/ip4/127.0.0.1/tcp/5001')
 
 const list = await bitswap.wantlist(key)
 // ...
@@ -135,13 +137,13 @@ crossorigin="anonymous"></script>
 CDN-based BTFS API provides the `IpfsHttpClient` constructor as a method of the global `window` object. Example:
 
 ```js
-const ipfs = window.IpfsHttpClient({ host: 'localhost', port: 5001 })
+const btfs = window.BtfsHttpClient({ host: 'localhost', port: 5001 })
 ```
 
 If you omit the host and port, the client will parse `window.host`, and use this information. This also works, and can be useful if you want to write apps that can be run from multiple different gateways:
 
 ```js
-const ipfs = window.IpfsHttpClient()
+const btfs = window.BtfsHttpClient()
 ```
 
 ### CORS
@@ -149,8 +151,8 @@ const ipfs = window.IpfsHttpClient()
 In a web browser BTFS HTTP client (either browserified or CDN-based) might encounter an error saying that the origin is not allowed. This would be a CORS ("Cross Origin Resource Sharing") failure: BTFS servers are designed to reject requests from unknown domains by default. You can whitelist the domain that you are calling from by changing your ipfs config like this:
 
 ```console
-$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin  '["http://example.com"]'
-$ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
+$ btfs config --json API.HTTPHeaders.Access-Control-Allow-Origin  '["http://example.com"]'
+$ btfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST", "GET"]'
 ```
 
 ### Custom Headers
@@ -158,7 +160,7 @@ $ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST
 If you wish to send custom headers with each request made by this library, for example, the Authorization header. You can use the config to do so:
 
 ```js
-const ipfs = ipfsClient({
+const btfs = btfsClient({
   host: 'localhost',
   port: 5001,
   protocol: 'http',
@@ -174,9 +176,9 @@ To set a global timeout for _all_ requests pass a value for the `timeout` option
 
 ```js
 // Timeout after 10 seconds
-const ipfs = ipfsClient({ timeout: 10000 })
+const btfs = btfsClient({ timeout: 10000 })
 // Timeout after 2 minutes
-const ipfs = ipfsClient({ timeout: '2m' })
+const btfs = btfsClient({ timeout: '2m' })
 // see https://www.npmjs.com/package/parse-duration for valid string values
 ```
 
@@ -186,38 +188,37 @@ const ipfs = ipfsClient({ timeout: '2m' })
 
 > `js-btfs-http-client` follows the spec defined by [`interface-ipfs-core`](https://github.com/ipfs/interface-js-ipfs-core), which concerns the interface to expect from BTFS implementations. This interface is a currently active endeavor. You can use it today to consult the methods available.
 
+
+#### Renting and hosting
+
+- Storage upload API
+    - [`btfs.uplodad([inputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+- Offline signing API
+    - [`btfs.getContracts([inputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+    - [`btfs.getUnsigned([inputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+    - [`btfs.sign([inputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+    - [`btfs.signBatch([inputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+    - [`btfs.statusSign([iputs], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
+             
 #### Files
 
 - [Regular Files API](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md)
   - [`ipfs.add(data, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#add)
-  - [`ipfs.addPullStream([options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#addpullstream)
-  - [`ipfs.addReadableStream([options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#addreadablestream)
-  - [`ipfs.addFromStream(stream)`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#addfromstream)
-  - [`ipfs.addFromFs(path, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#addfromfs)
-  - [`ipfs.addFromURL(url, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#addfromurl)
   - [`ipfs.cat(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#cat)
-  - [`ipfs.catPullStream(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#catpullstream)
-  - [`ipfs.catReadableStream(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#catreadablestream)
   - [`ipfs.get(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#get)
-  - [`ipfs.getPullStream(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#getpullstream)
-  - [`ipfs.getReadableStream(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#getreadablestream)
   - [`ipfs.ls(ipfsPath)`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#ls)
-  - [`ipfs.lsPullStream(ipfsPath)`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#lspullstream)
-  - [`ipfs.lsReadableStream(ipfsPath)`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#lsreadablestream)
+  
 - [MFS (mutable file system) specific](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#mutable-file-system)
-
-  _Explore the Mutable File System through interactive coding challenges in our [ProtoSchool tutorial](https://proto.school/#/mutable-file-system/)._
   - [`ipfs.files.cp([from, to])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filescp)
   - [`ipfs.files.flush([path])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filesflush)
   - [`ipfs.files.ls([path], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filesls)
   - [`ipfs.files.mkdir(path, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filesmkdir)
   - [`ipfs.files.mv([from, to])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filesmv)
   - [`ipfs.files.read(path, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filesread)
-  - [`ipfs.files.readPullStream(path, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filesreadpullstream)
-  - [`ipfs.files.readReadableStream(path, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filesreadreadablestream)
   - [`ipfs.files.rm(path, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filesrm)
   - [`ipfs.files.stat(path, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#filesstat)
   - [`ipfs.files.write(path, content, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#fileswrite)
+  _Explore the Mutable File System through interactive coding challenges in our [ProtoSchool tutorial](https://proto.school/#/mutable-file-system/)._
 
 - [block](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/BLOCK.md)
   - [`ipfs.block.get(cid, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/BLOCK.md#blockget)
@@ -226,20 +227,15 @@ const ipfs = ipfsClient({ timeout: '2m' })
 
 - [refs](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/REFS.md)
   - [`ipfs.refs(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/REFS.md#refs)
-  - [`ipfs.refsReadableStream(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/REFS.md#refsreadablestream)
-  - [`ipfs.refsPullStream(ipfsPath, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/REFS.md#refspullstream)
   - [`ipfs.refs.local()`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/REFS.md#refslocal)
-  - [`ipfs.refs.localReadableStream()`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/REFS.md#refslocalreadablestream)
-  - [`ipfs.refs.localPullStream()`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/REFS.md#refslocalpullstream)
 
 #### Graph
 
 - [dag](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/DAG.md)
-
-  _Explore the DAG API through interactive coding challenges in our [ProtoSchool tutorial](https://proto.school/#/basics)._
   - [`ipfs.dag.get(cid, [path], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/DAG.md#dagget)
   - [`ipfs.dag.put(dagNode, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/DAG.md#dagput)
   - [`ipfs.dag.tree(cid, [path], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/DAG.md#dagtree)
+  _Explore the DAG API through interactive coding challenges in our [ProtoSchool tutorial](https://proto.school/#/basics)._
 
 - [object](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/OBJECT.md)
   - [`ipfs.object.data(multihash, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/OBJECT.md#objectdata)
@@ -257,9 +253,6 @@ const ipfs = ipfsClient({ timeout: '2m' })
   - [`ipfs.pin.add(hash, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/PIN.md#pinadd)
   - [`ipfs.pin.ls([hash], [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/PIN.md#pinls)
   - [`ipfs.pin.rm(hash, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/PIN.md#pinrm)
-
-- refs
-  - `ipfs.refs.local()`
 
 #### Network
 
@@ -306,8 +299,6 @@ const ipfs = ipfsClient({ timeout: '2m' })
   - [`ipfs.dns(domain)`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/MISCELLANEOUS.md#dns)
   - [`ipfs.id()`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/MISCELLANEOUS.md#id)
   - [`ipfs.ping(id, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/MISCELLANEOUS.md#ping)
-  - [`ipfs.pingPullStream(id, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/MISCELLANEOUS.md#pingpullstream)
-  - [`ipfs.pingReadableStream(id, [options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/MISCELLANEOUS.md#pingreadablestream)
   - [`ipfs.stop()`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/MISCELLANEOUS.md#stop). Alias to `ipfs.shutdown`.
   - [`ipfs.version()`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/MISCELLANEOUS.md#version)
 
@@ -321,8 +312,6 @@ const ipfs = ipfsClient({ timeout: '2m' })
 - [stats](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/STATS.md)
   - [`ipfs.stats.bitswap()`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/STATS.md#statsbitswap)
   - [`ipfs.stats.bw([options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/STATS.md#statsbw)
-  - [`ipfs.stats.bwPullStream([options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/STATS.md#statsbwpullstream)
-  - [`ipfs.stats.bwReadableStream([options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/STATS.md#statsbwreadablestream)
   - [`ipfs.stats.repo([options])`](https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/STATS.md#statsrepo)
 
 - log
@@ -362,22 +351,89 @@ Call this on your client instance to return an object containing the `host`, `po
 
 Aside from the default export, `btfs-http-client` exports various types and utilities that are included in the bundle:
 
-- [`isIPFS`](https://www.npmjs.com/package/is-ipfs)
 - [`Buffer`](https://www.npmjs.com/package/buffer)
-- [`PeerId`](https://www.npmjs.com/package/peer-id)
-- [`PeerInfo`](https://www.npmjs.com/package/peer-info)
 - [`multiaddr`](https://www.npmjs.com/package/multiaddr)
 - [`multibase`](https://www.npmjs.com/package/multibase)
 - [`multicodec`](https://www.npmjs.com/package/multicodec)
-- [`multihash`](https://www.npmjs.com/package/multihash)
+- [`multihash`](https://www.npmjs.com/package/multihashes)
 - [`CID`](https://www.npmjs.com/package/cids)
+- [`globSource`](https://github.com/ipfs/js-ipfs-utils/blob/master/src/files/glob-source.js) (not available in the browser)
+- [`urlSource`](https://github.com/ipfs/js-ipfs-utils/blob/master/src/files/url-source.js)
 
 These can be accessed like this, for example:
 
 ```js
-const { CID } = require('ipfs-http-client')
+const { CID } = require('btfs-http-client')
 // ...or from an es-module:
-import { CID } from 'ipfs-http-client'
+import { CID } from 'btfs-http-client'
+```
+
+##### Glob source
+
+A utility to allow files on the file system to be easily added to IPFS.
+
+###### `globSource(path, [options])`
+
+- `path`: A path to a single file or directory to glob from
+- `options`: Optional options
+- `options.recursive`: If `path` is a directory, use option `{ recursive: true }` to add the directory and all its sub-directories.
+- `options.ignore`: To exclude file globs from the directory, use option `{ ignore: ['ignore/this/folder/**', 'and/this/file'] }`.
+- `options.hidden`: Hidden/dot files (files or folders starting with a `.`, for example, `.git/`) are not included by default. To add them, use the option `{ hidden: true }`.
+
+Returns an async iterable that yields `{ path, content }` objects suitable for passing to `ipfs.add`.
+
+###### Example
+
+```js
+const BtfsHttpClient = require('btfs-http-client')
+const { globSource } = BtfsHttpClient
+const btfs = BtfsHttpClient()
+
+for await (const file of btfs.add(globSource('./docs', { recursive: true }))) {
+  console.log(file)
+}
+/*
+{
+  path: 'docs/assets/anchor.js',
+  cid: CID('QmVHxRocoWgUChLEvfEyDuuD6qJ4PhdDL2dTLcpUy3dSC2'),
+  size: 15347
+}
+{
+  path: 'docs/assets/bass-addons.css',
+  cid: CID('QmPiLWKd6yseMWDTgHegb8T7wVS7zWGYgyvfj7dGNt2viQ'),
+  size: 232
+}
+...
+*/
+```
+
+##### URL source
+
+A utility to allow content from the internet to be easily added to IPFS.
+
+###### `urlSource(url)`
+
+- `url`: A string URL or [`URL`](https://developer.mozilla.org/en-US/docs/Web/API/URL) instance to send HTTP GET request to
+
+Returns an async iterable that yields `{ path, content }` objects suitable for passing to `btfs.add`.
+
+###### Example
+
+```js
+const BtfsHttpClient = require('btfs-http-client')
+const { urlSource } = BtfsHttpClient
+const btfs = BtfsHttpClient()
+
+for await (const file of ipfs.add(urlSource('https://ipfs.io/images/ipfs-logo.svg'))) {
+  console.log(file)
+}
+/*
+{
+  path: 'ipfs-logo.svg',
+  cid: CID('QmTqZhR6f7jzdhLgPArDPnsbZpvvgxzCZycXK7ywkLxSyU'),
+  size: 3243
+}
+*/
 ```
 
 ## Development
@@ -390,10 +446,10 @@ We run tests by executing `npm test` in a terminal window. This will run both No
 
 The js-btfs-http-client is a work in progress. As such, there's a few things you can do right now to help out:
 
-- **[Check out the existing issues](https://github.com/ipfs/js-btfs-http-client/issues)**!
+- **[Check out the existing issues](https://github.com/TRON-US/js-btfs-http-client/issues)**!
 - **Perform code reviews**. More eyes will help a) speed the project along b) ensure quality and c) reduce possible future bugs.
 - **Add tests**. There can never be enough tests. Note that interface tests exist inside [`interface-ipfs-core`](https://github.com/ipfs/interface-ipfs-core/tree/master/js/src).
-- **Contribute to the [FAQ repository](https://github.com/ipfs/faq/issues)** with any questions you have about BTFS or any of the relevant technology. A good example would be asking, 'What is a merkledag tree?'. If you don't know a term, odds are, someone else doesn't either. Eventually, we should have a good understanding of where we need to improve communications and teaching together to make BTFS and IPN better.
+- **Contribute to the [FAQ repository](https://github.com/TRON-US/faq/issues)** with any questions you have about BTFS or any of the relevant technology. A good example would be asking, 'What is a merkledag tree?'. If you don't know a term, odds are, someone else doesn't either. Eventually, we should have a good understanding of where we need to improve communications and teaching together to make BTFS and IPN better.
 
 ## License
 
